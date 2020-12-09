@@ -43,7 +43,8 @@
           <ul>
             {% for item in contents %}
               <li>
-                <a href="/download/{{ item.Key }}"> {{ item.Key }} </a>
+                <a href="/download/{{ item.Key }}"> {{ item.Key }} </a><br/>
+                <img src="{{ item.imageURL }}" alt="{{ item.Key }}" class="img-circle" style="width:500px;height:400px;"/>
               </li>
             {% endfor %}
           </ul>

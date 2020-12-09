@@ -28,9 +28,10 @@ def storage():
 @app.route("/upload", methods=['POST'])
 def upload():
     if request.method == "POST":
-        f = request.files['file']
-        f.save(f.filename)
-        upload_file(f"{f.filename}", BUCKET)
+        if request.files['file']:
+            f = request.files['file']
+            f.save(f.filename)
+            upload_file(f"{f.filename}", BUCKET)
 
         return redirect("/storage")
 
