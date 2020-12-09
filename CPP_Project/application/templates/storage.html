@@ -1,0 +1,102 @@
+{% extends "bootstrap/base.html" %}
+{% block title %} AWS S3 File Storage App{% endblock %}
+{% block navbar %}
+
+<!DOCTYPE html>
+<html lang="en">
+ 
+
+ 
+
+  <body>
+
+     <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" ><a href="/">Home</a></li>
+            <li role="presentation"class="active"><a href="/storage">My Storage</a></li>
+            <li role="presentation"><a href="#">Contact</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">AWS S3 Storage App</h3>
+      </div>
+
+      <div class="jumbotron">
+        <h3>S3 App Demo</h3>
+    
+        <p>Welcome to this AWS S3 Demo</p>
+    
+        <h2> {{ msg }}</h2>
+    
+        <div>
+          <h1>Upload your file here:</h1>
+          <form method="POST" action="/upload" enctype=multipart/form-data>
+            <input type=file name=file>
+            <input type=submit value=Upload>
+          </form>
+        </div>
+        
+        <div>
+          <h3>These are your uploaded files:</h3>
+          <p>Click on the filename to download it.</p>
+          <ul>
+            {% for item in contents %}
+              <li>
+                <a href="/download/{{ item.Key }}"> {{ item.Key }} </a>
+              </li>
+            {% endfor %}
+          </ul>
+    
+        </div>
+        
+        
+        
+        
+       
+        
+      </div>
+
+      <div class="row marketing">
+        <div class="col-lg-6">
+          <h4>Subheading</h4>
+          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+          <h4>Subheading</h4>
+          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+          <h4>Subheading</h4>
+          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+
+        <div class="col-lg-6">
+          <h4>Subheading</h4>
+          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+          <h4>Subheading</h4>
+          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+          <h4>Subheading</h4>
+          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <p>&copy; 2016 Company, Inc.</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    
+  </body>
+</html>
+
+<img src="https://s3app-600.s3.amazonaws.com/Photo+4.jpg">
+
+
+{% endblock %}
+
+
+
