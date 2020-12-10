@@ -6,10 +6,17 @@ from s3 import list_files, download_file, upload_file
 
 from flask_bootstrap import Bootstrap
 
+import boto3
+
+import uuid
+
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 BUCKET = "rb-test-myapp-bucket"
+dynamodb = boto3.resource('dynamodb')
+dynamoTeamsTable = dynamodb.Table('Premier-League-Teams')
+dynamoPlayersTable = dynamodb.Table('Premier-League-Players')
 bootstrap = Bootstrap(app)
 
 
@@ -17,6 +24,50 @@ bootstrap = Bootstrap(app)
 def entry_point():
     return render_template('main.html')
     #return 'Hello World!'
+
+
+@app.route('/teams')
+def teams():
+    return render_template('teams.html')
+
+@app.route("/team", methods=['POST'])
+def uploadTeamEntry():
+    if request.method == "POST":
+        
+        team = request.form['team']
+        
+        dynamoTeamsTable.put_item(
+            Item={
+                'ID': str(uuid.uuid4()),
+                'Team':team
+            }
+        )
+        
+        msg = "Thanks for voting "+team+" as your favourite team!"
+    
+        return render_template('main.html',msg = msg)
+        
+        
+@app.route('/players')
+def players():
+    return render_template('players.html')
+
+@app.route("/player", methods=['POST'])
+def uploadPlayerEntry():
+    if request.method == "POST":
+        
+        player = request.form['player']
+        
+        dynamoPlayersTable.put_item(
+            Item={
+                'ID': str(uuid.uuid4()),
+                'Player':player
+            }
+        )
+        
+        msg = "Thanks for voting "+player+" as your favourite player!"
+    
+        return render_template('main.html',msg = msg)
 
 
 @app.route("/storage")
@@ -36,7 +87,7 @@ def upload():
         return redirect("/storage")
 
 
-@app.route("/download/<filename>", methods=['GET'])
+@app.route("/<filename>", methods=['GET'])
 def download(filename):
     if request.method == 'GET':
         output = download_file(filename, BUCKET)

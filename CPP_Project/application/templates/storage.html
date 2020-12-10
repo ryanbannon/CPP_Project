@@ -15,8 +15,9 @@
         <nav>
           <ul class="nav nav-pills pull-right">
             <li role="presentation" ><a href="/">Home</a></li>
-            <li role="presentation"class="active"><a href="/storage">My Storage</a></li>
-            <li role="presentation"><a href="#">Contact</a></li>
+            <li role="presentation" class="active"><a href="/storage">My Storage</a></li>
+            <li role="presentation"><a href="/teams">Teams</a></li>
+            <li role="presentation"><a href="/players">Players</a></li>
           </ul>
         </nav>
         <h3 class="text-muted">AWS S3 Storage App</h3>
@@ -42,10 +43,9 @@
           <p>Click on the filename to download it.</p>
           <ul>
             {% for item in contents %}
-              <li>
-                <a href="/download/{{ item.Key }}"> {{ item.Key }} </a><br/>
-                <img src="{{ item.imageURL }}" alt="{{ item.Key }}" class="img-circle" style="width:500px;height:400px;"/>
-              </li>
+                <a href="/{{ item.Key }}">
+                  <img src="{{ item.imageURL }}" alt="{{ item.Key }}" class="img-circle" style="width:500px;height:400px;"/>
+                </a><br/><br/>
             {% endfor %}
           </ul>
     
