@@ -10,6 +10,7 @@ import boto3
 
 import uuid
 
+import json
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
@@ -28,7 +29,16 @@ def entry_point():
 
 @app.route('/teams')
 def teams():
-    return render_template('teams.html')
+    contents = []
+    with open('leagueTable.json') as json_file:
+        data = json.load(json_file)
+        for p in data['records']:
+            contents.append(p['team'])
+            print(p['team'])
+    
+    print(contents)
+    return render_template('teams.html', contents=contents)
+
 
 @app.route("/team", methods=['POST'])
 def uploadTeamEntry():
@@ -51,6 +61,18 @@ def uploadTeamEntry():
 @app.route('/players')
 def players():
     return render_template('players.html')
+    '''
+    contents = []
+    with open('leagueTable.json') as json_file:
+        data = json.load(json_file)
+        for p in data['records']:
+            contents.append(p['team'])
+            print(p['team'])
+    
+    print(contents)
+    return render_template('players.html', contents=contents)
+    '''
+
 
 @app.route("/player", methods=['POST'])
 def uploadPlayerEntry():
