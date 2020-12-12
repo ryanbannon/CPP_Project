@@ -23,18 +23,52 @@ bootstrap = Bootstrap(app)
 
 @app.route('/')
 def entry_point():
-    return render_template('main.html')
-    #return 'Hello World!'
+    
+    table = dynamoTeamsTable.scan()
 
+    teamsList = []
+    for i in table['Items']:
+        teamsList.append(i['Team'])
 
+    #print(teamsList)
+       
+    uniqueTeamsList = []     
+    for j in teamsList:
+        dict = {}
+        if j not in uniqueTeamsList:
+            dict['team'] = j
+            dict['count'] = teamsList.count(j)
+            uniqueTeamsList.append(dict)
+                
+    #print(uniqueTeamsList)
+    
+    chartSet = set()
+    contents = []
+    for d in uniqueTeamsList:
+        if d['team'] not in chartSet:
+            chartSet.add(d['team'])
+            contents.append(d)            
+    
+    print(contents)
+    
+    return render_template('main.html', contents=contents)
+    
+    
 @app.route('/teams')
 def teams():
     contents = []
     with open('leagueTable.json') as json_file:
         data = json.load(json_file)
+        i = 1
         for p in data['records']:
-            contents.append(p['team'])
-            print(p['team'])
+            dict = {}
+            dict['team'] = p['team']
+            dict['position'] = i
+            dict['played'] = p['played']
+            dict['points'] = p['points']
+            contents.append(dict)
+            print(dict)
+            i += 1
     
     print(contents)
     return render_template('teams.html', contents=contents)

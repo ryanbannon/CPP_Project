@@ -40,14 +40,18 @@
             <thead>
               <tr>
                 <th scope="col">League Position</th>
-                <th scope="col">Vote for your favourite Football Club</th>
+                <th scope="col">Games Played</th>
+                <th scope="col">Points</th>
+                <th scope="col">Vote</th>
               </tr>
             </thead>
             <tbody>
               {% for item in contents %} 
                 <tr>
-                  <th scope="row">{{ item }}</th>
-                  <td><input type="submit" name="team" value="{{ item }}" class="btn btn-primary btn-block"/></td>
+                  <th scope="row">{{ item.position }}</th>
+                  <td scope="row">{{ item.played }}</th>
+                  <td scope="row">{{ item.points }}</th>
+                  <td><input type="submit" name="team" value="{{ item.team }}" class="btn btn-primary btn-block"/></td>
                 </tr>
               {% endfor %}
             </tbody>
