@@ -7,10 +7,13 @@ from s3 import list_files, download_file, upload_file
 from flask_bootstrap import Bootstrap
 
 import boto3
+from botocore.exceptions import ClientError
 
 import uuid
 
 import json
+
+from colours import ColourGenerator
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
@@ -23,35 +26,54 @@ bootstrap = Bootstrap(app)
 
 @app.route('/')
 def entry_point():
+ 
+    table = None
     
-    table = dynamoTeamsTable.scan()
-
-    teamsList = []
-    for i in table['Items']:
-        teamsList.append(i['Team'])
-
-    #print(teamsList)
-       
-    uniqueTeamsList = []     
-    for j in teamsList:
-        dict = {}
-        if j not in uniqueTeamsList:
-            dict['team'] = j
-            dict['count'] = teamsList.count(j)
-            uniqueTeamsList.append(dict)
-                
-    #print(uniqueTeamsList)
+    cg = ColourGenerator()
     
-    chartSet = set()
+    try:
+        table = dynamoTeamsTable.scan()
+        print("AWS Token Valid.")
+    except ClientError as err:
+        if err.response['Error']['Code'] == 'ExpiredToken':
+            print("AWS Token Expired. Renew and retry")
+            #meta[u'result_status'] = ResultStatus.RENEW_TOKEN
+            return
+
     contents = []
-    for d in uniqueTeamsList:
-        if d['team'] not in chartSet:
-            chartSet.add(d['team'])
-            contents.append(d)            
+    if table is None:
+        pass
+    else:
+        teamsList = []
+        for i in table['Items']:
+            teamsList.append(i['Team'])
+           
+        results = cg.getPremierLeagueColoursRGBA(teamsList)
+        teamsList = results
+        
+        uniqueTeamsList = []     
+        for j in teamsList:
+            dict = {}
+            if j not in uniqueTeamsList:
+                dict['team'] = j['team']
+                dict['colour'] = j['colour']
+                dict['count'] = teamsList.count(j)
+                uniqueTeamsList.append(dict)
     
-    print(contents)
-    
+        chartSet = set()
+        for d in uniqueTeamsList:
+            if d['team'] not in chartSet:
+                chartSet.add(d['team'])
+                contents.append(d)            
+        
+        print(contents)
+        
     return render_template('main.html', contents=contents)
+    
+    
+@app.route('/index')
+def index():
+    return render_template('index.html')    
     
     
 @app.route('/teams')
@@ -70,7 +92,6 @@ def teams():
             print(dict)
             i += 1
     
-    print(contents)
     return render_template('teams.html', contents=contents)
 
 
@@ -89,23 +110,12 @@ def uploadTeamEntry():
         
         msg = "Thanks for voting "+team+" as your favourite team!"
     
-        return render_template('main.html',msg = msg)
+        return render_template('thanks.html',msg = msg)
         
         
 @app.route('/players')
 def players():
     return render_template('players.html')
-    '''
-    contents = []
-    with open('leagueTable.json') as json_file:
-        data = json.load(json_file)
-        for p in data['records']:
-            contents.append(p['team'])
-            print(p['team'])
-    
-    print(contents)
-    return render_template('players.html', contents=contents)
-    '''
 
 
 @app.route("/player", methods=['POST'])
@@ -123,13 +133,18 @@ def uploadPlayerEntry():
         
         msg = "Thanks for voting "+player+" as your favourite player!"
     
-        return render_template('main.html',msg = msg)
+        return render_template('thanks.html',msg = msg)
 
 
 @app.route("/storage")
 def storage():
    contents = list_files(BUCKET)
    return render_template('storage.html', contents=contents)
+
+
+@app.route('/thanks')
+def thanks():
+    return render_template('thanks.html')
 
 
 @app.route("/upload", methods=['POST'])

@@ -1,4 +1,14 @@
-import http.client
+#import http.client
+from colours import ColourGenerator
+
+data = []
+
+cg = ColourGenerator()
+
+n = cg.getPremierLeagueColours(data)
+
+print(n)
+
 '''
 conn = http.client.HTTPSConnection("heisenbug-premier-league-live-scores-v1.p.rapidapi.com")
 

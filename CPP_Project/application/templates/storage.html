@@ -4,10 +4,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
- 
-
- 
-
   <body>
 
      <div class="container">
@@ -20,7 +16,7 @@
             <li role="presentation"><a href="/players">Players</a></li>
           </ul>
         </nav>
-        <h3 class="text-muted">AWS S3 Storage App</h3>
+        <h3 class="text-muted">Premier League App</h3>
       </div>
 
       <div class="jumbotron">
@@ -37,20 +33,31 @@
             <input type=submit value=Upload>
           </form>
         </div>
-        
-        <div>
-          <h3>These are your uploaded files:</h3>
-          <p>Click on the filename to download it.</p>
-          <ul>
-            {% for item in contents %}
-                <a href="/{{ item.Key }}">
-                  <img src="{{ item.imageURL }}" alt="{{ item.Key }}" class="img-circle" style="width:100%;height:100%;"/>
-                </a><br/><br/>
-            {% endfor %}
-          </ul>
-        </div>
       </div>
 
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row">
+            {% for item in contents %}
+            <div class="col-md-6">
+              <div class="card mb-6 box-shadow">
+                <a href="/{{ item.Key }}">
+                  <img src="{{ item.imageURL }}" alt="{{ item.Key }}" class="card-img-top" style="width:100%;height:400px;margin-top:10px;"/>
+                </a>
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
 
        <br/><br/>
       <footer class="footer">
@@ -59,14 +66,10 @@
 
     </div> <!-- /container -->
 
-
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     
   </body>
 </html>
-
-<img src="https://s3app-600.s3.amazonaws.com/Photo+4.jpg">
-
 
 {% endblock %}
 

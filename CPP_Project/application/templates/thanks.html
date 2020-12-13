@@ -15,7 +15,7 @@
             <li role="presentation"><a href="/">Home</a></li>
             <li role="presentation"><a href="/storage">Storage</a></li>
             <li role="presentation"><a href="/teams">Teams</a></li>
-            <li role="presentation" class="active"><a href="/players">Players</a></li>
+            <li role="presentation"><a href="/players">Players</a></li>
           </ul>
         </nav>
         <h3 class="text-muted">Premier League App</h3>
@@ -23,19 +23,16 @@
 
     
       <div class="jumbotron">
-        <h3>Vote for your favourite Premier League player</h3>
-      </div>
-      
-      <form method="post" action="/player">
-        <div class="form-group">
-          <input class="form-control" type="text" name="player" placeholder="Player">
-        </div>
-        <div class="form-group">
-         <input type="submit" name="submit" value="Submit Favourite Player" class="btn btn-primary btn-block">
-        </div>
-      </form>
+    
+        {% if msg %}
+          <h2> Message: {{ msg }}</h2>
+        {% endif %}
+        
+        <a href="/"><button class="btn btn-primary btn-block">Homepage</button></a>
 
-      <br/><br/>
+      </div>
+
+       <br/><br/>
       <footer class="footer">
         <p>&#169; 2020 | Ryan Bannon | Cloud Platform Programming</p>
       </footer>
@@ -45,11 +42,6 @@
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
-
-
-
-
-
 
 
 {% endblock %}
