@@ -1,47 +1,14 @@
-{% extends "bootstrap/base.html" %}
-{% block title %} AWS S3 File Storage App{% endblock %}
-{% block navbar %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-
-  <body>
-
-    <div class="container">
-      <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-            <li role="presentation"><a href="/storage">Storage</a></li>
-            <li role="presentation"><a href="/teams">Teams</a></li>
-            <li role="presentation"><a href="/players">Players</a></li>
-          </ul>
-        </nav>
-        <h3 class="text-muted">Premier League App</h3>
-      </div>
-
-    
-      <div class="jumbotron">
+{% extends "layout.html" %}
+{% block content %}
+      <div class="jumbotron" style="margin-top:125px;">
     
         {% if msg %}
-          <h2> Message: {{ msg }}</h2>
+          <h2>Your vote for <strong>{{ msg }}</strong> has been saved. Thank you.</h2><br/>
+        {% else %}
+          <h2>Oops! Are you lost?</h2><br/>
         {% endif %}
         
-        <a href="/"><button class="btn btn-primary btn-block">Homepage</button></a>
+        <a href="/"><button class="btn btn-primary btn-block">Return to Homepage</button></a>
 
       </div>
-
-       <br/><br/>
-      <footer class="footer">
-        <p>&#169; 2020 | Ryan Bannon | Cloud Platform Programming</p>
-      </footer>
-
-    </div> <!-- /container -->
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
-
-
-{% endblock %}
+{% endblock content %}

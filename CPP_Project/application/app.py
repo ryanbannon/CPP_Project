@@ -1,26 +1,16 @@
 import os
-
 from flask import Flask, render_template, request, redirect, send_file, url_for
-
 from s3 import list_files, download_file, upload_file
-
+from dynamodb import db_put_team_item, db_put_player_item, db_scan_items
 from flask_bootstrap import Bootstrap
-
-import boto3
-from botocore.exceptions import ClientError
-
-import uuid
-
 import json
-
 from colours import ColourGenerator
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 BUCKET = "rb-test-myapp-bucket"
-dynamodb = boto3.resource('dynamodb')
-dynamoTeamsTable = dynamodb.Table('Premier-League-Teams')
-dynamoPlayersTable = dynamodb.Table('Premier-League-Players')
+dynamoTeamsTable = 'Premier-League-Teams'
+dynamoPlayersTable = 'Premier-League-Players'
 bootstrap = Bootstrap(app)
 
 
@@ -28,17 +18,8 @@ bootstrap = Bootstrap(app)
 def entry_point():
  
     table = None
-    
     cg = ColourGenerator()
-    
-    try:
-        table = dynamoTeamsTable.scan()
-        print("AWS Token Valid.")
-    except ClientError as err:
-        if err.response['Error']['Code'] == 'ExpiredToken':
-            print("AWS Token Expired. Renew and retry")
-            #meta[u'result_status'] = ResultStatus.RENEW_TOKEN
-            return
+    table = db_scan_items(dynamoTeamsTable)
 
     contents = []
     if table is None:
@@ -66,14 +47,7 @@ def entry_point():
                 chartSet.add(d['team'])
                 contents.append(d)            
         
-        print(contents)
-        
     return render_template('main.html', contents=contents)
-    
-    
-@app.route('/index')
-def index():
-    return render_template('index.html')    
     
     
 @app.route('/teams')
@@ -89,7 +63,6 @@ def teams():
             dict['played'] = p['played']
             dict['points'] = p['points']
             contents.append(dict)
-            print(dict)
             i += 1
     
     return render_template('teams.html', contents=contents)
@@ -98,19 +71,10 @@ def teams():
 @app.route("/team", methods=['POST'])
 def uploadTeamEntry():
     if request.method == "POST":
-        
         team = request.form['team']
-        
-        dynamoTeamsTable.put_item(
-            Item={
-                'ID': str(uuid.uuid4()),
-                'Team':team
-            }
-        )
-        
-        msg = "Thanks for voting "+team+" as your favourite team!"
+        db_put_team_item(team, dynamoTeamsTable)
     
-        return render_template('thanks.html',msg = msg)
+        return render_template('thanks.html',msg = team)
         
         
 @app.route('/players')
@@ -121,19 +85,10 @@ def players():
 @app.route("/player", methods=['POST'])
 def uploadPlayerEntry():
     if request.method == "POST":
-        
         player = request.form['player']
-        
-        dynamoPlayersTable.put_item(
-            Item={
-                'ID': str(uuid.uuid4()),
-                'Player':player
-            }
-        )
-        
-        msg = "Thanks for voting "+player+" as your favourite player!"
+        db_put_player_item(player, dynamoPlayersTable)
     
-        return render_template('thanks.html',msg = msg)
+        return render_template('thanks.html',msg = player)
 
 
 @app.route("/storage")

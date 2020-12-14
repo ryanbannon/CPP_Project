@@ -31,11 +31,9 @@ def list_files(bucket):
     contents = []
     try:
         for item in s3.list_objects(Bucket=bucket)['Contents']:
-            print(item)
             item['imageURL'] = "https://"+bucket+".s3.amazonaws.com/"+item['Key']
-            print(item['imageURL'])
             contents.append(item)
     except Exception as e:
-        pass
+        print(e)
 
     return contents

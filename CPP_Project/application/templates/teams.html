@@ -1,29 +1,7 @@
-{% extends "bootstrap/base.html" %}
-{% block title %} AWS S3 File Storage App{% endblock %}
-{% block navbar %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-
-  <body>
-
-    <div class="container">
-      <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-            <li role="presentation"><a href="/storage">Storage</a></li>
-            <li role="presentation" class="active"><a href="/teams">Teams</a></li>
-            <li role="presentation"><a href="/players">Players</a></li>
-          </ul>
-        </nav>
-        <h3 class="text-muted">Premier League App</h3>
-      </div>
-
-    
-      <div class="jumbotron">
-        <h3>Vote for your favourite Premier League team</h3>
+{% extends "layout.html" %}
+{% block content %}
+      <div class="jumbotron" style="margin-top:125px;">
+        <h3>Premier League Team Vote</h3>
       </div>
       
       <form method="post" action="/team">
@@ -52,22 +30,4 @@
           </table>
         </div>
       </form>
-      
-       <br/><br/>
-      <footer class="footer">
-        <p>&#169; 2020 | Ryan Bannon | Cloud Platform Programming</p>
-      </footer>
-
-    </div> <!-- /container -->
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
-
-
-
-
-
-
-
-{% endblock %}
+{% endblock content %}

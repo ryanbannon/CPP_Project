@@ -1,139 +1,35 @@
-{% extends "bootstrap/base.html" %}
-{% block title %} AWS S3 File Storage App{% endblock %}
-{% block navbar %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-  <body>
-
-    <div class="container">
-      <div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="/">Home</a></li>
-            <li role="presentation"><a href="/storage">Storage</a></li>
-            <li role="presentation"><a href="/teams">Teams</a></li>
-            <li role="presentation"><a href="/players">Players</a></li>
-          </ul>
-        </nav>
-        <h3 class="text-muted">Premier League App</h3>
+{% extends "layout.html" %}
+{% block content %}
+      <div class="jumbotron" style="margin-top:125px;">
+        <h3>Voting Results</h3>
+        <p>Premier League Team Vote results are displayed below</p>
       </div>
-    
-      <div class="jumbotron">
+      
+      <div class = "container">
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Football Club</th>
+                  <th scope="col"># Votes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in contents %} 
+                  <tr>
+                    <th scope="row">{{ item.team }}</th>
+                    <td scope="row">{{ item.count }}</th>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
           
-        <h2>Premier League</h2>
-        
-        <p>Most popular teams</p>
-    
-        <h3> {{ msg }}</h3>
-       
-      </div>
-      
-      <div class="col-md-6">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Football Club</th>
-              <th scope="col"># Votes</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in contents %} 
-              <tr>
-                <th scope="row">{{ item.team }}</th>
-                <td scope="row">{{ item.count }}</th>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      
-      <div class="col-md-6">
-        <canvas id="myChart" width="400" height="400"></canvas>
-      </div>
-    
-    </div>
-      
-       <br/><br/>
-      <footer class="footer">
-        <p>&#169; 2020 | Ryan Bannon | Cloud Platform Programming</p>
-      </footer>
-    <section class="footer-area footer-dark">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6">
-                    <div class="footer-logo text-center">
-                        <a class="mt-30" href="index.html"><img src="assets/images/logo.svg" alt="Logo"></a>
-                    </div> <!-- footer logo -->
-                    <ul class="social text-center mt-60">
-                        <li><a href="https://facebook.com/uideckHQ"><i class="lni lni-facebook-filled"></i></a></li>
-                        <li><a href="https://twitter.com/uideckHQ"><i class="lni lni-twitter-original"></i></a></li>
-                        <li><a href="https://instagram.com/uideckHQ"><i class="lni lni-instagram-original"></i></a></li>
-                        <li><a href="#"><i class="lni lni-linkedin-original"></i></a></li>
-                    </ul> <!-- social -->
-                    <div class="footer-support text-center">
-                        <span class="number">+8801234567890</span>
-                        <span class="mail">support@uideck.com</span>
-                    </div>
-                    <div class="copyright text-center mt-35">
-                        <p class="text">Designed by <a href="https://uideck.com" rel="nofollow">UIdeck</a> and Built-with <a rel="nofollow" href="https://ayroui.com">Ayro UI</a> </p>
-                    </div> <!--  copyright -->
-                </div>
-            </div> <!-- row -->
-        </div> <!-- container -->
-    </section>
-      
-<script>
+          <div class="col-md-6">
+            <canvas id="myChart" width="400" height="400"></canvas>
+          </div>
+        </div>  
+      </div>  
 
-var someJavaScriptVar = '{{ contents }}';
-someJavaScriptVar = someJavaScriptVar.replaceAll("&#39;",'"'); 
-var obj = JSON.parse(someJavaScriptVar);
-
-function random_rgba() {
-    var o = Math.round, r = Math.random, s = 255;
-    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
-}
-
-var labels = []; 
-var data = []; 
-var colours = [];
-for(var i in obj){
-  labels.push(obj[i].team);
-  colours.push(obj[i].colour);
-  data.push(obj[i].count);
-}
-
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: '# of Votes',
-            data: data,
-            backgroundColor: colours,
-            borderColor: colours,
-            borderWidth: 1
-        }]
-    },
-    options: {
-			responsive: true
-    }
-});
-</script>
-
-    </div> <!-- /container -->
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
-
-
-
-
-
-
-
-{% endblock %}
+{% endblock content %}
