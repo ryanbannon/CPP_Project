@@ -4,7 +4,8 @@ from s3 import list_files, download_file, upload_file
 from dynamodb import db_put_team_item, db_put_player_item, db_scan_items
 from flask_bootstrap import Bootstrap
 import json
-from colours import ColourGenerator
+#from colours import ColourGenerator
+from colour_generator_pkg import colours
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
@@ -18,7 +19,8 @@ bootstrap = Bootstrap(app)
 def entry_point():
  
     table = None
-    cg = ColourGenerator()
+    #cg = ColourGenerator()
+    cg = colours.ColourGenerator()
     table = db_scan_items(dynamoTeamsTable)
 
     contents = []

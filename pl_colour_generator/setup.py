@@ -12,7 +12,7 @@ setuptools.setup(
     description="A small package that retrives the primary colours associated with each of the English Premier League football teams",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com/ryanbannon/CPP_Project/tree/main/pl_colour_generator",
     packages=setuptools.find_packages(),
     # if you have libraries that your module/package/library
     #you would include them in the install_requires argument
