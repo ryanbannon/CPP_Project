@@ -1,8 +1,9 @@
 import boto3
 from botocore.exceptions import ClientError
 import uuid
+from datetime import date
 
-def db_put_team_item(team, table):
+def db_put_team_item(team, email, table):
     """
     Function to put an item into the Teams table in DynamoDB
     """
@@ -13,6 +14,8 @@ def db_put_team_item(team, table):
         return dynamoTable.put_item(
             Item={
                 'ID': str(uuid.uuid4()),
+                'Email': email,
+                'Datetime': date.today().strftime("%d/%m/%Y"),
                 'Team':team
             }
         )
@@ -20,7 +23,7 @@ def db_put_team_item(team, table):
         pass
     
     
-def db_put_player_item(player, table):
+def db_put_player_item(player, email, table):
     """
     Function to put an item into the Players table in DynamoDB
     """
@@ -31,6 +34,8 @@ def db_put_player_item(player, table):
         return dynamoTable.put_item(
             Item={
                 'ID': str(uuid.uuid4()),
+                'Email': email,
+                'Datetime': date.today().strftime("%d/%m/%Y"),
                 'Player':player
             }
         )

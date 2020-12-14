@@ -3,7 +3,11 @@
       <div class="jumbotron" style="margin-top:125px;">
     
         {% if msg %}
-          <h2>Your vote for <strong>{{ msg }}</strong> has been saved. Thank you.</h2><br/>
+          {% if msg.startswith('Please enter your email')  %}
+            <h3>{{ msg }}</h3><br/>
+          {% else %}
+            <h2>Your vote for <strong>{{ msg }}</strong> has been saved. Thank you.</h2><br/>
+          {% endif %}
         {% else %}
           <h2>Oops! Are you lost?</h2><br/>
         {% endif %}

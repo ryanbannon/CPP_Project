@@ -74,9 +74,14 @@ def teams():
 def uploadTeamEntry():
     if request.method == "POST":
         team = request.form['team']
-        db_put_team_item(team, dynamoTeamsTable)
-    
-        return render_template('thanks.html',msg = team)
+        email = request.form['email']
+        
+        if email != "":
+            db_put_team_item(team, email, dynamoTeamsTable)
+            return render_template('thanks.html',msg = team)
+        else:
+            msg = "Please enter your email address and try again"
+            return render_template('thanks.html',msg = msg)
         
         
 @app.route('/players')
@@ -88,9 +93,14 @@ def players():
 def uploadPlayerEntry():
     if request.method == "POST":
         player = request.form['player']
-        db_put_player_item(player, dynamoPlayersTable)
-    
-        return render_template('thanks.html',msg = player)
+        email = request.form['email']
+        
+        if email != "":
+            db_put_player_item(player, email, dynamoPlayersTable)
+            return render_template('thanks.html',msg = player)
+        else:
+            msg = "Please enter your email address and try again"
+            return render_template('thanks.html',msg = msg)
 
 
 @app.route("/storage")
@@ -99,7 +109,7 @@ def storage():
    return render_template('storage.html', contents=contents)
 
 
-@app.route('/thanks')
+@app.route('/message')
 def thanks():
     return render_template('thanks.html')
 

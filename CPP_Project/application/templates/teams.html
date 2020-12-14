@@ -2,9 +2,26 @@
 {% block content %}
       <div class="jumbotron" style="margin-top:125px;">
         <h3>Premier League Team Vote</h3>
+        
+        {% if msg %}
+          <h2><strong>{{ msg }}</strong></h2><br/>
+        {% endif %}
       </div>
       
       <form method="post" action="/team">
+        <div class="row">
+          <div class="col-lg-12">
+            <h4 class="contact-title pb-10"><i class="lni lni-envelope"></i> Submit <span>Your Team Entry Here.</span></h4>
+            <div class="form-input mt-15">
+                <label>Your Email</label>
+                <div class="input-items default">
+                    <input name="email" type="email" placeholder="example@email.com">
+                    <i class="lni lni-user"></i>
+                </div>
+            </div> <!-- form input -->
+          </div>
+        </div>    
+        <br/><br/>
         <div>
           <h4>Premier League Teams:</h4>
           
