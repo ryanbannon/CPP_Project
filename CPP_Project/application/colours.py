@@ -85,4 +85,3 @@ class ColourGenerator:
             
             results.append(dict)
         return results
-    
