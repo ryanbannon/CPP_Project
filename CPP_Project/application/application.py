@@ -155,7 +155,7 @@ def upload():
             f.save(f.filename)
             upload_file(f"{f.filename}", BUCKET)
 
-        return redirect("/storage")
+        return redirect("/images")
 
 
 @application.route("/<filename>", methods=['GET'])
