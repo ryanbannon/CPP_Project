@@ -4,18 +4,19 @@ from s3 import list_files, download_file, upload_file
 from dynamodb import db_put_team_item, db_put_player_item, db_scan_items
 from flask_bootstrap import Bootstrap
 import json
+from datetime import date
 #from colours import ColourGenerator
 from colour_generator_pkg import colours
 
-app = Flask(__name__)
+application = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
-BUCKET = "rb-test-myapp-bucket"
+BUCKET = "rb-pl-voting-app-images" # rb-test-myapp-bucket
 dynamoTeamsTable = 'Premier-League-Teams'
 dynamoPlayersTable = 'Premier-League-Players'
-bootstrap = Bootstrap(app)
+bootstrap = Bootstrap(application)
 
 
-@app.route('/')
+@application.route('/')
 def entry_point():
  
     table = None
@@ -52,7 +53,7 @@ def entry_point():
     return render_template('main.html', contents=contents)
     
     
-@app.route('/teams')
+@application.route('/teams')
 def teams():
     contents = []
     with open('leagueTable.json') as json_file:
@@ -70,51 +71,83 @@ def teams():
     return render_template('teams.html', contents=contents)
 
 
-@app.route("/team", methods=['POST'])
+@application.route("/team", methods=['POST'])
 def uploadTeamEntry():
     if request.method == "POST":
         team = request.form['team']
         email = request.form['email']
+        isEmail = False
+        isToday = False
         
         if email != "":
-            db_put_team_item(team, email, dynamoTeamsTable)
-            return render_template('thanks.html',msg = team)
+            response = db_scan_items(dynamoTeamsTable)
+            
+            for i in response['Items']:
+                for key, value in i.items():
+                    if str(key) == 'Email' and str(value) == email:
+                        isEmail = True
+                    if str(key) == 'Datetime' and str(value) == date.today().strftime("%d/%m/%Y"):
+                        isToday = True
+   
+            if isEmail and isToday:
+                msg = "Sorry :( You can only vote once a day"
+                return render_template('thanks.html',msg = msg)
+            else:
+                db_put_team_item(team, email, dynamoTeamsTable)
+                return render_template('thanks.html',msg = team)
+            
         else:
             msg = "Please enter your email address and try again"
             return render_template('thanks.html',msg = msg)
         
         
-@app.route('/players')
+@application.route('/players')
 def players():
     return render_template('players.html')
 
 
-@app.route("/player", methods=['POST'])
+@application.route("/player", methods=['POST'])
 def uploadPlayerEntry():
     if request.method == "POST":
         player = request.form['player']
         email = request.form['email']
+        isEmail = False
+        isToday = False
         
         if email != "":
-            db_put_player_item(player, email, dynamoPlayersTable)
-            return render_template('thanks.html',msg = player)
+            response = db_scan_items(dynamoPlayersTable)
+            
+            for i in response['Items']:
+                for key, value in i.items():
+                    if str(key) == 'Email' and str(value) == email:
+                        isEmail = True
+                    if str(key) == 'Datetime' and str(value) == date.today().strftime("%d/%m/%Y"):
+                        isToday = True
+   
+            if isEmail and isToday:
+                msg = "Sorry :( You can only vote once a day"
+                return render_template('thanks.html',msg = msg)
+            else:
+                db_put_player_item(player, email, dynamoPlayersTable)
+                return render_template('thanks.html',msg = player)
+            
         else:
             msg = "Please enter your email address and try again"
             return render_template('thanks.html',msg = msg)
 
 
-@app.route("/storage")
+@application.route("/images")
 def storage():
    contents = list_files(BUCKET)
    return render_template('storage.html', contents=contents)
 
 
-@app.route('/message')
+@application.route('/message')
 def thanks():
     return render_template('thanks.html')
 
 
-@app.route("/upload", methods=['POST'])
+@application.route("/upload", methods=['POST'])
 def upload():
     if request.method == "POST":
         if request.files['file']:
@@ -125,7 +158,7 @@ def upload():
         return redirect("/storage")
 
 
-@app.route("/<filename>", methods=['GET'])
+@application.route("/<filename>", methods=['GET'])
 def download(filename):
     if request.method == 'GET':
         output = download_file(filename, BUCKET)
@@ -134,4 +167,4 @@ def download(filename):
 
 
 if __name__ == '__main__':
-     app.run(host='0.0.0.0', port=8080, debug=True)
+     application.run(host='0.0.0.0', port=8080, debug=True)

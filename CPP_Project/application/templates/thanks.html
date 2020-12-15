@@ -5,6 +5,8 @@
         {% if msg %}
           {% if msg.startswith('Please enter your email')  %}
             <h3>{{ msg }}</h3><br/>
+          {% elif msg.startswith('Sorry :(')  %}
+            <h3>{{ msg }}</h3><br/>
           {% else %}
             <h2>Your vote for <strong>{{ msg }}</strong> has been saved. Thank you.</h2><br/>
           {% endif %}
