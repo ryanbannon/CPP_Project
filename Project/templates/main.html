@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+      <div class="jumbotron" style="margin-top:125px;">
+        <h3>Voting Results</h3>
+        <p>Premier League Team Vote results are displayed below</p>
+      </div>
+      
+      <div class = "container">
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Football Club</th>
+                  <th scope="col"># Votes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in contents %} 
+                  <tr>
+                    <th scope="row">{{ item.team }}</th>
+                    <td scope="row">{{ item.count }}</th>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="col-md-6">
+            <canvas id="myChart" width="400" height="400"></canvas>
+          </div>
+        </div>  
+      </div>  
+
+{% endblock content %}

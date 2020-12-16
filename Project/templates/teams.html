@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block content %}
+      <div class="jumbotron" style="margin-top:125px;">
+        <h3>Premier League Team Vote</h3>
+        
+        {% if msg %}
+          <h2><strong>{{ msg }}</strong></h2><br/>
+        {% endif %}
+      </div>
+      
+      <form method="post" action="/team">
+        <div class="row">
+          <div class="col-lg-12">
+            <h4 class="contact-title pb-10"><i class="lni lni-envelope"></i> Submit <span>Your Team Entry Here.</span></h4>
+            <div class="form-input mt-15">
+                <label>Your Email</label>
+                <div class="input-items default">
+                    <input name="email" type="email" placeholder="example@email.com">
+                    <i class="lni lni-user"></i>
+                </div>
+            </div> <!-- form input -->
+          </div>
+        </div>    
+        <br/><br/>
+        <div>
+          <h4>Premier League Teams:</h4>
+          
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">League Position</th>
+                <th scope="col">Games Played</th>
+                <th scope="col">Points</th>
+                <th scope="col">Vote</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in contents %} 
+                <tr>
+                  <th scope="row">{{ item.position }}</th>
+                  <td scope="row">{{ item.played }}</th>
+                  <td scope="row">{{ item.points }}</th>
+                  <td><input type="submit" name="team" value="{{ item.team }}" class="btn btn-primary btn-block"/></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </form>
+{% endblock content %}

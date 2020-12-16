@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+      <div class="jumbotron" style="margin-top:125px;">
+        <h3>Favourite Football Images</h3>
+        <p>Add your own favourite football image here or click on the images below to download them and share with others</p>
+        <br/>
+        <div>
+          <form method="POST" action="/upload" enctype=multipart/form-data>
+            <input type="file" name="file" accept=".jpg,.png"/>
+            <input type="submit" value="Upload"/>
+          </form>
+        </div>
+      </div>
+
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row">
+            {% for item in contents %}
+            <div class="col-md-6">
+              <div class="card mb-6 box-shadow">
+                <a href="/{{ item.Key }}">
+                  <img src="{{ item.imageURL }}" alt="{{ item.Key }}" class="card-img-top" style="width:100%;height:400px;margin-top:10px;"/>
+                </a>
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <p>{{ item.Key }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+{% endblock content %}
+
+
